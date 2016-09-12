@@ -1,9 +1,15 @@
 {
   "list": [{
-    "author": "李宾",
+    "author": "PPT",
     "homepage": "https://github.com/realeve",
     "path": "基于MarkDown的PPT制作",
     "title": "基于MarkDown的PPT制作",
+    "weibo": "http://weibo.com/realeve"
+  },{
+    "author": "质量",
+    "homepage": "https://github.com/realeve",
+    "path": "微创新兴趣小组",
+    "title": "微创新兴趣小组",
     "weibo": "http://weibo.com/realeve"
   }]
 }
