@@ -1,12 +1,12 @@
 var app = (function() {
 	var defaultTheme = 'moon';
+	var getUrlParam = function(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		var r = encodeURI(window.location.search).substr(1).match(reg);
+		if (r !== null) return decodeURI(r[2]);
+		return null;
+	};
 	var initDom = function() {
-		var getUrlParam = function(name) {
-			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-			var r = encodeURI(window.location.search).substr(1).match(reg);
-			if (r !== null) return decodeURI(r[2]);
-			return null;
-		};
 
 		const getQueryObj = () => {
 			var obj = {
@@ -52,9 +52,9 @@ var app = (function() {
 			return '<a href="#" name="theme" onclick="document.getElementById(\'theme\').setAttribute(\'href\',\'./css/theme.' + item + '.css\'); return false;">' + item + '</a>';
 		});
 		var str = `
-    <div style="margin-top:40px; font-Size:14pt;">请选择主题: <br>
-      ${styleList.join(' - ')}
-    </div>`;
+		    <div style="margin-top:40px; font-Size:14pt;">请选择主题: <br>
+		      ${styleList.join(' - ')}
+		    </div>`;
 		$('section').first().append(date + str);
 	};
 
@@ -85,27 +85,48 @@ var app = (function() {
 	};
 
 	var startTimer = function() {
-		if (slideStarted === 0) {
-			setInterval(clock, 1000);
-		}
+		// if (slideStarted === 0) {
+		// 	setInterval(clock, 1000);
+		// }
 		if (!isFullScreen) {
 			enterFullscreen();
 			isFullScreen = true;
 		}
 	};
 
+	function openNotes() {
+
+		// if( !notesFilePath ) {
+		// 	var jsFileLocation = document.querySelector('script[src$="notes.js"]').src;  // this js file path
+		// 	jsFileLocation = jsFileLocation.replace(/notes\.js(\?.*)?$/, '');   // the js folder path
+		// 	notesFilePath = jsFileLocation + 'notes.html';
+		// }
+		var params = getUrlParam('_multiscreen');
+		var notesFilePath;
+		if (params === null) {
+			notesFilePath = window.location.href.replace('?', '?_multiscreen=1&');
+			window.location = notesFilePath; //(notesFilePath, 'Notes', 'width=1100,height=700');
+			//window.open(notesFilePath, 'Notes', 'width=1100,height=600');
+		} else if (params == '1') {
+			notesFilePath = window.location.href.replace('_multiscreen=1', '_multiscreen=control&');
+			window.open(notesFilePath, 'Notes', 'width=1100,height=600');
+		}
+	}
+
 	$('body').on('keydown', function(event) {
 		var keyName = event.key;
 		var key = event.keyCode;
-		console.log(key + ':' + keyName);		
+		//console.log(key + ':' + keyName);
 		startTimer();
 		if (key == 27) {
 			isFullScreen = false;
-		} else if (keyName != 'Control' &&
-			keyName != 'F12' &&
-			keyName != 'F5' &&
-			keyName != 'Alt') {
-			enterFullscreen();
+		} else if (key == 83) {
+			openNotes();
+			// } else if (keyName != 'Control' &&
+			// 	keyName != 'F12' &&
+			// 	keyName != 'F5' &&
+			// 	keyName != 'Alt') {
+			// 	enterFullscreen();
 		}
 	});
 
@@ -113,43 +134,52 @@ var app = (function() {
 	var fixImgFolder = function() {
 		//MD文件默认图片目录
 		var DEFAULT_SLIDE_IMG_CONTENT = $('section').first().attr('data-img-content') || 'markdown';
-		var obj = $('section [data-markdown-parsed="true"] img');
+		var obj = $('section img');
 		var imgSrc = obj.attr('src').replace('./', './' + DEFAULT_SLIDE_IMG_CONTENT + '/');
 		obj.attr('src', imgSrc);
 	};
-	
-	var initSlide = function(){
-			Slide.init({
-				containerID: 'container',
-				drawBoardID: 'drawBoard',
-				slideClass: '.slide',
-				buildClass: '.build',
-				progressID: 'progress',
-				transition: 'slide3',
-				width: 1100,
-				dir: './',    
-				//打开下面的注释就开启postMessage方式
-				//访问网址127.0.0.1:8080/ppt/demo#client
-				control:{
-						type: 'postMessage',
-						args:{
-								isControl:  false
-						}
-				},				
-				tipID: 'tip'
-		});
-		
-		MixJS.loadJS('highlight/highlight.pack.js',function(){
-				hljs.tabReplace = '  ';
-				hljs.initHighlightingOnLoad();
+
+	var initSlide = function() {
+		Slide.init({
+			containerID: 'container',
+			drawBoardID: 'drawBoard',
+			slideClass: '.slide',
+			buildClass: '.build',
+			progressID: 'progress',
+			transition: 'slide3',
+			width: 1100,
+			dir: './',
+			//打开下面的注释就开启postMessage方式
+			//访问网址127.0.0.1:8080/ppt/demo#client
+			control: {
+				type: 'postMessage',
+				args: {
+					isControl: true
+				}
+			},
+			tipID: 'tip'
 		});
 	};
-	
-	var init = (function(){
+
+	var initMd = function() {
+		var url = $('section').first().data('markdown');
+		$.get(url, function(data) {
+			var json = parser(data);
+			//console.log(json);
+			$('#container').html(json.content);
+			fixImgFolder();
+
+			hljs.tabReplace = '  ';
+			hljs.initHighlightingOnLoad();
+
+			initSlide();
+		});
+	};
+
+	var init = (function() {
 		initDom();
-		RevealMarkdown.initialize();
-		appendThemeList();
-		initSlide();
+		initMd();
+		//appendThemeList();
 	})();
 
 })();
