@@ -167,7 +167,7 @@ var app = (function() {
 		var url = $('section').first().data('markdown');
 		$.get(url, function(data) {
 			var json = parser(data);
-			//console.log(json);
+			console.log(json);
 			$('#container').html(json.content);
 			fixImgFolder();
 
