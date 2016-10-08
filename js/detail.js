@@ -135,8 +135,10 @@ var app = (function() {
 		//MD文件默认图片目录
 		var DEFAULT_SLIDE_IMG_CONTENT = $('section').first().attr('data-img-content') || 'markdown';
 		var obj = $('section img');
-		var imgSrc = obj.attr('src').replace('./', './' + DEFAULT_SLIDE_IMG_CONTENT + '/');
-		obj.attr('src', imgSrc);
+		if (obj.length) {
+			var imgSrc = obj.attr('src').replace('./', './' + DEFAULT_SLIDE_IMG_CONTENT + '/');
+			obj.attr('src', imgSrc);
+		}
 	};
 
 	var initSlide = function() {
