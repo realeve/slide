@@ -339,13 +339,13 @@
 			}
 		}
 	}
-	
-	function handleBackgroundImg(node,html){
-		if(html.indexOf('background-image')!==-1){
+
+	function handleBackgroundImg(node, html) {
+		if (html.indexOf('background-image') !== -1) {
 			node.parentNode.className += ' fill';
 		}
-	}	
-	
+	}
+
 	/**
 	 * Converts any current data-markdown slides in the
 	 * DOM to HTML.
@@ -353,7 +353,7 @@
 	function convertSlides() {
 
 		var sections = document.querySelectorAll('[data-markdown]');
-		
+
 		//MD文件默认图片目录
 		var DEFAULT_SLIDE_IMG_CONTENT = sections[0].getAttribute('data-img-content', true) || 'markdown';
 
@@ -370,18 +370,18 @@
 				var markdown = getMarkdownFromSlide(section);
 
 				var html = marked(markdown);
-				
+
 				//MD中引用的图片转为指定的目录
-				section.innerHTML = html.replace(RegExp(/<img src=".\//gi), '<img src="./' + DEFAULT_SLIDE_IMG_CONTENT+'/');
+				section.innerHTML = html.replace(RegExp(/<img src=".\//gi), '<img src="./' + DEFAULT_SLIDE_IMG_CONTENT + '/');
 				addAttributes(section.parentNode, section, null, section.getAttribute('data-element-attributes') ||
 					section.parentNode.getAttribute('data-element-attributes') ||
 					DEFAULT_ELEMENT_ATTRIBUTES_SEPARATOR,
 					section.getAttribute('data-attributes') ||
 					section.parentNode.getAttribute('data-attributes') ||
 					DEFAULT_SLIDE_ATTRIBUTES_SEPARATOR);
-				
-				handleBackgroundImg(section,html);
-				
+
+				handleBackgroundImg(section, html);
+
 				// If there were notes, we need to re-add them after
 				// having overwritten the section's HTML
 				if (notes) {
@@ -390,7 +390,7 @@
 
 			}
 		}
-
+		$('.slide.fill').append('<div style="background-color:rgba(55,68,84,.82);position:absolute;left:0;right:0;top:0;bottom:0;width:100%;height:100%;z-index:-1;">');
 	}
 
 	// API
