@@ -136,9 +136,16 @@ var app = (function() {
 		//MD文件默认图片目录
 		var DEFAULT_SLIDE_IMG_CONTENT = $('section').first().attr('data-img-content') || 'markdown';
 		var obj = $('section img');
+<<<<<<< HEAD
 		var imgSrc = obj.attr('src').replace('./', './' + DEFAULT_SLIDE_IMG_CONTENT + '/');
 		obj.attr('src', imgSrc);
 		$('.slide.fill').append('<div style="background-color:rgba(55,68,84,.82);position:absolute;left:0;right:0;top:0;bottom:0;width:100%;height:100%;z-index:-1;"></div>');
+=======
+		if (obj.length) {
+			var imgSrc = obj.attr('src').replace('./', './' + DEFAULT_SLIDE_IMG_CONTENT + '/');
+			obj.attr('src', imgSrc);
+		}
+>>>>>>> ced6a77f0dec33aabe231dbf823a5294ffd4330e
 	};
 
 	var initSlide = function() {
@@ -167,7 +174,7 @@ var app = (function() {
 		var url = $('section').first().data('markdown');
 		$.get(url, function(data) {
 			var json = parser(data);
-			//console.log(json);
+			console.log(json);
 			$('#container').html(json.content);
 			fixImgFolder();
 

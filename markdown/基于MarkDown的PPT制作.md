@@ -84,12 +84,13 @@ Markdown 的粗体和斜体也非常简单，用两个 \* 包含一段文本就�
 至此，关于MarkDown的主要语法就结束了，更详细的说明可以看[这里]()。
 
 ----
-<!-- .slide: style="background-image:url('./img/bg1.png')" -->
+<!-- .slide: style="background-image:url('./img/osx.jpg')" -->
 ##<i class="fa fa-bookmark success"></i> 如何用MARKDOWN写SLIDE
  当前所看到的这个Slide就是用MARKDOWN所写成，你可以点击 [这里](./markdown/基于MarkDown的PPT制作.md) 下载MARKDOWN文件浏览其中的样式。
 
 但是这个文件也仅是一个MARKDOWN文件，要转换成PPT还需要一个开源库——REVEAL.JS。
 
+<!-- <img style="background-color:rgba(55,68,84,.82);position:absolute;left:0;right:0;top:0;bottom:0;width:100%;height:100%;z-index:-1;"> -->
 ----
 ##<i class="glyphicon glyphicon-leaf"></i> REVEAL.JS用法
 
