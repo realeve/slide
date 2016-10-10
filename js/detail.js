@@ -1,3 +1,4 @@
+
 var app = (function() {
 	var defaultTheme = 'moon';
 	var getUrlParam = function(name) {
@@ -137,6 +138,7 @@ var app = (function() {
 		var obj = $('section img');
 		var imgSrc = obj.attr('src').replace('./', './' + DEFAULT_SLIDE_IMG_CONTENT + '/');
 		obj.attr('src', imgSrc);
+		$('.slide.fill').append('<div style="background-color:rgba(55,68,84,.82);position:absolute;left:0;right:0;top:0;bottom:0;width:100%;height:100%;z-index:-1;"></div>');
 	};
 
 	var initSlide = function() {
