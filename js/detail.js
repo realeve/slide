@@ -1,12 +1,13 @@
 var app = (function() {
 	var defaultTheme = 'moon';
-	var getUrlParam = function(name) {
-		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-		var r = encodeURI(window.location.search).substr(1).match(reg);
-		if (r !== null) return decodeURI(r[2]);
-		return null;
-	};
+	var queryObj;
 	var initDom = function() {
+		var getUrlParam = function(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = encodeURI(window.location.search).substr(1).match(reg);
+			if (r !== null) return decodeURI(r[2]);
+			return null;
+		};
 
 		const getQueryObj = () => {
 			var obj = {
@@ -18,6 +19,9 @@ var app = (function() {
 				obj.theme = defaultTheme;
 			}
 			obj.theme = './css/theme.' + obj.theme + '.css';
+			if (obj.title == 'null') {
+				obj.title = decodeURI(obj.file);
+			}
 			obj.file = './markdown/' + obj.file + '.md';
 			obj.print = window.location.search.match(/print-pdf/gi) ? '/css/print/pdf.css' : 'tools/css/print/paper.css';
 			return obj;
@@ -25,7 +29,8 @@ var app = (function() {
 
 		// let node = document.getElementById('stage');
 		let node = document.getElementsByTagName('section')[0];
-		let queryObj = getQueryObj();
+		queryObj = getQueryObj();
+		console.log(queryObj);
 		document.title = queryObj.title;
 		document.getElementById('theme').setAttribute('href', queryObj.theme);
 		//打印PDF
@@ -47,15 +52,19 @@ var app = (function() {
 		};
 
 		var date = '<h3 style="margin-top:40px;">' + getDate() + '</h3>';
-		var styleList = ['dark', 'moon', 'blue', 'green', 'light'];
-		styleList = styleList.map(function(item) {
-			return '<a href="#" name="theme" onclick="document.getElementById(\'theme\').setAttribute(\'href\',\'./css/theme.' + item + '.css\'); return false;">' + item + '</a>';
-		});
-		var str = `
+		if (location.href.indexOf('theme') == -1) {
+			var styleList = ['dark', 'moon', 'blue', 'green', 'light'];
+			styleList = styleList.map(function(item) {
+				return '<a href="#" name="theme" onclick="document.getElementById(\'theme\').setAttribute(\'href\',\'./css/theme.' + item + '.css\'); return false;">' + item + '</a>';
+			});
+			var str = `
 		    <div style="margin-top:40px; font-Size:14pt;">请选择主题: <br>
 		      ${styleList.join(' - ')}
 		    </div>`;
-		$('section').first().append(date + str);
+			$('section').first().append(date + str);
+		} else {
+			$('section').first().append(date);
+		}
 	};
 
 	var slideStarted = 0;

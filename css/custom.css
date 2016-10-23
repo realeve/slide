@@ -22,3 +22,9 @@
      opacity: 0.9;
      color: #fff;
  }
+ .fill,.fill>section,.fill>section>h1,.fill>section>h2,.fill>section>h3{
+ 	color:#E8F0F3;
+ }
+ .fill>section>h1,.fill>section>h2,.fill>section>h3{
+ 	text-shadow:none;
+ }
